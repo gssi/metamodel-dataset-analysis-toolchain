@@ -1,5 +1,5 @@
 # Repository Evaluation ToolChain
-This project includes the toolchain we have used to automatically characterize a < a href="https://github.com/gssi/metamodel-dataset-analysis-toolchain/tree/master/metamodels">dataset of 2,420 metamodels</a> made available for reuse. 
+This project includes the toolchain we have used to automatically characterize a <a href="https://github.com/gssi/metamodel-dataset-analysis-toolchain/tree/master/metamodels">dataset of 2,420 metamodels</a> made available for reuse. 
 The result of the analysis is available at https://docs.google.com/spreadsheets/d/1rJF7EPcGQB7tENeo3XYS2unwD5da7u3u3PJ0TKta0ew/edit?usp=sharing 
 
 ## Scope of the presented tool
