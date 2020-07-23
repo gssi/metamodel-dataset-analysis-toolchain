@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Company" nsURI="http://cs.gssi.it/company/0" nsPrefix="company">
+  <eClassifiers xsi:type="ecore:EClass" name="CompanyModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="companies" upperBound="-1"
+        eType="#//Company" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persons" upperBound="100"
+        eType="#//Person" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" upperBound="-1"
+        eType="#//Project" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lines" upperBound="-1"
+        eType="#//ProductionLine" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Company">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employees" lowerBound="5"
+        upperBound="2" eType="#//Employee" containment="true" eOpposite="#//Employee/model"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" eSuperTypes="#//Person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Employee" eSuperTypes="#//Person">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="works" lowerBound="2" upperBound="2"
+        eOpposite="#//Project/assigned"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="#//Company"
+        eOpposite="#//Company/employees"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProductionLine"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Client" eSuperTypes="#//Person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assigned" upperBound="-1"
+        eType="#//Employee" eOpposite="#//Employee/works"/>
+  </eClassifiers>
+</ecore:EPackage>

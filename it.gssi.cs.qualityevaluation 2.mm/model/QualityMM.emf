@@ -1,0 +1,34 @@
+@namespace(uri="http://cs.gssi.it/mm/quality", prefix="quality")
+package QualityMM;
+
+class QualityModel {
+  attr String libName;
+  attr String modelname;
+ 
+  val QualityEvaluation[*] qualityEvals;
+}
+
+class QualityEvaluation {
+  attr String evaluatedArtifact;
+  val QualityAttribute[*] qualityAttrs;
+  val QualityMetric[*] qualityMetrics;
+}
+class QualityMetric{
+	attr String name;
+	attr String varName;
+	attr float value;
+}
+
+class QualityAttribute {
+  attr Integer priority;
+  attr String name;
+  attr String varName;
+  attr float value;
+  attr BetterSolution[1] solution;
+}
+
+enum BetterSolution {
+  MIN = 0;
+  MAX = 1;
+}
+

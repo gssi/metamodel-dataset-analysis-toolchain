@@ -1,0 +1,6 @@
+artifact;errorcode;severity;message
+[%for (single in validationmodel.evals) { %]
+	[%for (error in single.errors) { %]
+		[%=single.evaluatedArtifact%];[%=error.code%];[%=error.severity%];[%=error.message%]
+	[%}%]
+[%}%]

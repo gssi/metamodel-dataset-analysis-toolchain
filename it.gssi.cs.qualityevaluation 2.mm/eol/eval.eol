@@ -1,0 +1,147 @@
+import "MM-Quality.eol";
+
+if(MM.isUndefined()) return;
+var emfTool : new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+var mmlabel: String="";
+if(getPackages(MM).size>0){
+
+if(getPackages(MM).first.nsUri.isDefined()){
+mmlabel=getPackages(MM).first.nsUri;
+}else{
+ mmlabel =getPackages(MM).first.name;
+}
+("\nEvaluation of the metamodel: "+mmlabel).println();
+var  evaluation : qualityModel!QualityEvaluation= new qualityModel!QualityEvaluation();
+evaluation.evaluatedArtifact=getPackages(MM).first.nsUri;
+
+("Metrics evaluation---------------").println();
+var nr_classes : Real=getClasses(MM).size().asFloat();
+("Number of metaclasses: "+nr_classes).println();
+if(not qualityModel!QualityMetric.all.select(qm|qm.varName=="nr_classes").isEmpty()){
+	var  metric : qualityModel!QualityMetric= new qualityModel!QualityMetric();
+	metric.name= qualityModel!QualityMetric.all.select(qm|qm.varName=="nr_classes").first.name;
+	metric.varName= qualityModel!QualityMetric.all.select(qa|qa.varName=="nr_classes").first.varName;
+	metric.value= nr_classes;
+	
+	evaluation.qualityMetrics.add(metric);
+	}
+
+
+
+var nr_refs: Real=getRef(MM).size().asFloat();
+("Number of references: "+nr_refs).println();
+if(not qualityModel!QualityMetric.all.select(qm|qm.varName=="nr_refs").isEmpty()){
+	var  metric : qualityModel!QualityMetric= new qualityModel!QualityMetric();
+	metric.name= qualityModel!QualityMetric.all.select(qm|qm.varName=="nr_refs").first.name;
+	metric.varName= qualityModel!QualityMetric.all.select(qa|qa.varName=="nr_refs").first.varName;
+	metric.value= nr_refs;
+	
+	evaluation.qualityMetrics.add(metric);
+	}
+	
+var nr_attrs: Real = getAttr(MM).size().asFloat();
+("Number of attributes: "+nr_attrs).println();
+if(not qualityModel!QualityMetric.all.select(qm|qm.varName=="nr_attrs").isEmpty()){
+	var  metric : qualityModel!QualityMetric= new qualityModel!QualityMetric();
+	metric.name= qualityModel!QualityMetric.all.select(qm|qm.varName=="nr_attrs").first.name;
+	metric.varName= qualityModel!QualityMetric.all.select(qa|qa.varName=="nr_attrs").first.varName;
+	
+	metric.value= nr_attrs;
+	
+	evaluation.qualityMetrics.add(metric);
+	}
+	
+var dit_max: Real=DIT(MM).max().asFloat();
+("DIT: "+dit_max).println();
+if(not qualityModel!QualityMetric.all.select(qm|qm.varName=="dit_max").isEmpty()){
+	var  metric : qualityModel!QualityMetric= new qualityModel!QualityMetric();
+	metric.name= qualityModel!QualityMetric.all.select(qm|qm.varName=="dit_max").first.name;
+	metric.varName= qualityModel!QualityMetric.all.select(qa|qa.varName=="dit_max").first.varName;
+	
+	metric.value= dit_max;
+	
+	evaluation.qualityMetrics.add(metric);
+	}
+	
+var hagg_max: Real=HAgg(MM).max().asFloat();
+("HAgg: "+hagg_max).println();
+if(not qualityModel!QualityMetric.all.select(qm|qm.varName=="hagg_max").isEmpty()){
+	var  metric : qualityModel!QualityMetric= new qualityModel!QualityMetric();
+	metric.name= qualityModel!QualityMetric.all.select(qm|qm.varName=="hagg_max").first.name;
+	metric.varName= qualityModel!QualityMetric.all.select(qa|qa.varName=="hagg_max").first.varName;
+	
+	metric.value= hagg_max;
+	
+	evaluation.qualityMetrics.add(metric);
+	}
+	
+("Unidirectional Ref: "+ getUnidirRef(MM).size() +" Opposite refs: "+ getOppositeRef(MM).size()).println();
+("Quality assessment---------------").println();
+
+var maintainability: Real = (nr_classes+nr_attrs+nr_refs+dit_max+hagg_max) / 5.0;
+("Evaluation of Maintainability of the metamodel: "+(maintainability)).println();
+//qualityModel!QualityAttribute.all.select(qa|qa.varName=="maintainability")
+if(not qualityModel!QualityAttribute.all.select(qa|qa.varName=="maintainability").isEmpty()){
+	var  attr : qualityModel!QualityAttribute= new qualityModel!QualityAttribute();
+	attr.name= qualityModel!QualityAttribute.all.select(qa|qa.varName=="maintainability").first.name;
+	attr.varName= qualityModel!QualityAttribute.all.select(qa|qa.varName=="maintainability").first.varName;
+	attr.value= maintainability;
+	attr.priority=qualityModel!QualityAttribute.all.select(qa|qa.varName=="maintainability").first.priority;
+	
+	evaluation.qualityAttrs.add(attr);
+	}
+
+var understandability: Real = ANA(MM);
+("Evaluation of Understandability of the metamodel: "+(understandability)).println();
+if(not qualityModel!QualityAttribute.all.select(qa|qa.varName=="understandability").isEmpty()){
+	var  attr : qualityModel!QualityAttribute= new qualityModel!QualityAttribute();
+	attr.name= qualityModel!QualityAttribute.all.select(qa|qa.varName=="understandability").first.name;
+	attr.varName= qualityModel!QualityAttribute.all.select(qa|qa.varName=="understandability").first.varName;
+	attr.value= understandability;
+	attr.priority=qualityModel!QualityAttribute.all.select(qa|qa.varName=="understandability").first.priority;
+	
+	evaluation.qualityAttrs.add(attr);
+	}
+	
+	
+var complexity = (getRef(MM).size() - getUnidirRef(MM).size() + getOppositeRef(MM).size() + understandability +(getRef(MM).size() - getContainmentRef(MM).size()));
+("Evaluation of Complexity of the metamodel: "+(complexity)).println();
+if(not qualityModel!QualityAttribute.all.select(qa|qa.varName=="complexity").isEmpty()){
+	var  attr : qualityModel!QualityAttribute= new qualityModel!QualityAttribute();
+	attr.name= qualityModel!QualityAttribute.all.select(qa|qa.varName=="complexity").first.name;
+	attr.varName= qualityModel!QualityAttribute.all.select(qa|qa.varName=="complexity").first.varName;
+	attr.value= complexity;
+	attr.priority=qualityModel!QualityAttribute.all.select(qa|qa.varName=="complexity").first.priority;
+	evaluation.qualityAttrs.add(attr);
+	}
+
+
+
+var NTF=getTotFeatures(MM);
+var INHF= getInheritedFeatures(MM);
+var reuse : Real = INHF / NTF;
+("Evaluation of Reuse of the metamodel: "+(reuse)).println();
+if(not qualityModel!QualityAttribute.all.select(qa|qa.varName=="reuse").isEmpty()){
+	var  attr : qualityModel!QualityAttribute= new qualityModel!QualityAttribute();
+	attr.name= qualityModel!QualityAttribute.all.select(qa|qa.varName=="reuse").first.name;
+	attr.varName= qualityModel!QualityAttribute.all.select(qa|qa.varName=="reuse").first.varName;
+	attr.value= reuse;
+	attr.priority=qualityModel!QualityAttribute.all.select(qa|qa.varName=="reuse").first.priority;
+	
+	evaluation.qualityAttrs.add(attr);
+	}
+	
+/*var relaxationdegree=getRefsRelaxationIndex(getIntervalRefs(MM),getMaxUpperRef(MM), getMinUpperRef(MM));
+("Evaluation of Relaxation Index of the metamodel: "+relaxationdegree).println();
+if(not qualityModel!QualityAttribute.all.select(qa|qa.varName=="relaxationdegree").isEmpty()){
+	var  attr : qualityModel!QualityAttribute= new qualityModel!QualityAttribute();
+	attr.name= qualityModel!QualityAttribute.all.select(qa|qa.varName=="relaxationdegree").first.name;
+	attr.varName= qualityModel!QualityAttribute.all.select(qa|qa.varName=="relaxationdegree").first.varName;
+	attr.value= relaxationdegree;
+	attr.priority=qualityModel!QualityAttribute.all.select(qa|qa.varName=="relaxationdegree").first.priority;
+	
+	evaluation.qualityAttrs.add(attr);
+	}*/
+//(relaxationdegree)/getRef(MM).size()).println();
+qualityModel!QualityModel.all.first.qualityEvals.add(evaluation);
+}

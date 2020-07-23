@@ -1,0 +1,174 @@
+
+
+operation getPackages(mm: Any) : List<Any>{
+	
+	return mm!EPackage.all;
+
+}
+ 
+operation getClasses(mm:Any): List<Any>{
+	
+	return mm!EClass.all;
+
+}
+
+operation getRef(mm:Any): List<Any>{
+	
+	return mm!EReference.all;
+
+}
+
+operation getUnidirRef(mm:Any): List<Any>{
+	
+	return mm!EReference.all.select(r|r.eOpposite.isUndefined());
+
+}
+
+operation getContainmentRef(mm:Any): List<Any>{
+	
+	return mm!EReference.all.select(r|r.containment);
+
+}
+
+operation getTotFeatures(mm:Any): Real{
+var totFeatures=0.0;
+	for (c in getClasses(mm)) { 
+		totFeatures  = totFeatures + c.eAllStructuralFeatures.size();
+	}
+return totFeatures;
+}
+
+operation getInheritedFeatures(mm:Any): Real{
+var totFeatures=0.0;
+	for (c in getClasses(mm)) { 
+		totFeatures= totFeatures + (c.eAllStructuralFeatures.size() - c.eStructuralFeatures.size());
+	}
+return totFeatures;
+}
+
+
+operation getOppositeRef(mm:Any): List<Any>{
+	
+	return mm!EReference.all.select(r|r.eOpposite.isDefined());
+
+}
+
+operation getAttr(mm:Any): List<Any>{
+	
+	return mm!EAttribute.all;
+
+}
+
+operation DIT_class(c: MM!EClass){
+	var dit: Integer = 0;
+	dit= c.eAllSuperTypes.size();
+	return dit;
+}
+
+operation DIT(mm:Any): List<Integer>{
+	
+	var  listdit: List<Integer>;
+	
+	
+	for (c in getClasses(mm)) { 
+	
+		listdit.add(DIT_class(c));
+	}
+	return listdit;
+
+}
+
+operation HAgg_class(c: MM!EClass, hagg:Integer,visited:Set): Integer{
+visited.add(c);
+	if(c.eReferences.size()==0 ){
+		return hagg;
+	} else{
+	//c.eReferences.collect(ref|ref.eOpposite).println();
+	//c.eReferences.select(ref|ref.eOpposite.isUndefined()).println();
+	for (r in c.eReferences.select(ref|ref.eOpposite.isUndefined())) {
+	 	if(visited.includes(r.eType)){
+	 	return hagg;
+	 	}else{
+	 	return  1+ HAgg_class(r.eType,hagg,visited);	
+	 	} 
+		 
+	}
+		
+	}
+	return hagg;
+}
+
+
+
+operation HAgg(mm:Any): List<Integer>{
+	var  hagg_list: List<Integer>;
+	
+	for (c in getClasses(mm)) { 
+	
+		var hagg=0;
+		if(HAgg_class(c,hagg,Set{})>0) hagg = HAgg_class(c,hagg,Set{});
+		
+		hagg_list.add(hagg);
+	}
+	return hagg_list;
+}
+
+operation ANA(mm: Any) :Real{
+var ANA: Real=0.0;
+var DIT_sum: Real= 0.0;
+for (c in getClasses(mm)) { 
+	DIT_sum=DIT_sum+(DIT_class(c)+1);
+}
+
+ANA=(DIT_sum ) / getClasses(mm).size();
+return ANA ;
+}
+
+operation getIntervalRefs(mm:Any): List<Integer>{
+var intervals: List<Any>;
+
+for (r in getRef(mm)) { 
+
+var _r_upper;
+	if(r.upperBound==-1){
+	
+		_r_upper = getMaxUpperRef(mm);
+		
+	}else{
+	
+		_r_upper=r.upperBound;
+		
+	}
+	//normalizeRefInterval(val, max, min)
+	intervals.add(((_r_upper - r.lowerBound) +1 ));
+
+}
+	return intervals;
+}
+
+operation getRefsRelaxationIndex(seq: List<Integer>, max: Real, min: Real): Real{
+var I=0.0;
+for (s in seq) { 
+	I=I+s;
+}
+return normalizeRefInterval(I, max, min);
+}
+
+operation getMaxUpperRef(mm:Any): Real{
+	if(getRef(mm).collect(r|r.upperBound)->includes(-1)){
+		return getRef(mm).collect(r|r.upperBound).max()*2;
+	}else{
+		return getRef(mm).collect(r|r.upperBound).max();
+	}
+}
+
+
+operation getMinUpperRef(mm:Any): Real{
+	return getRef(mm).select(r|r.upperBound > -1).collect(r|r.upperBound).min();
+}
+
+
+operation normalizeRefInterval(val: Real, max: Real, min : Real): Real { 
+	var I :Real =0.0;
+	return (val - min) / (max - min);
+}

@@ -1,0 +1,11 @@
+rule ValidationModel2CSV
+	transform s : ValidationErrorMM::ValidationModel {
+
+	template : "errors2csv.egl"
+
+	parameters : Map {"validationmodel" = s}
+
+	target : "gen/validation_"+s.evaluationDate+".csv"
+
+}
+
