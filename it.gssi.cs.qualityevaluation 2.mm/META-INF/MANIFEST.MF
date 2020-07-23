@@ -18,5 +18,6 @@ Require-Bundle: org.eclipse.emf;bundle-version="2.8.0",
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.epsilon.emc.emf,
  org.eclipse.epsilon.eol.engine,
- org.eclipse.emf.emfstore.common
+ org.eclipse.emf.emfstore.common,
+ org.eclipse.epsilon.egl.engine
 Bundle-ActivationPolicy: lazy

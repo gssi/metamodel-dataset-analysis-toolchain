@@ -1,0 +1,6 @@
+[%for (eval in qualitymodel.qualityEvals.select(e|e.evaluatedArtifact='Initial Setting')) { %]
+[%=eval.evaluatedArtifact%];[%for (metric in eval.qualityMetrics) { %][%=metric.name%];[%}%][%for (q in eval.qualityAttrs) { %][%=q.name%];[%}%][%}%]
+[%for (eval in qualitymodel.qualityEvals.select(e|e.evaluatedArtifact<>'Initial Setting')) { %]
+
+[%=eval.evaluatedArtifact%];[%for (metric in eval.qualityMetrics) { %][%=metric.value%];[%}%][%for (q in eval.qualityAttrs) { %][%=q.value%];[%}%]
+[%}%]

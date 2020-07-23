@@ -1,0 +1,11 @@
+rule Quality2CSV
+	transform s : QualityMM::QualityModel {
+
+	template : "quality2csv.egl"
+
+	parameters : Map {"qualitymodel" = s}
+
+	target : "gen/quality_"+s.modelname+".csv"
+
+}
+
