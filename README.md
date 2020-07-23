@@ -6,6 +6,7 @@ The result of the analysis is available at https://docs.google.com/spreadsheets/
 Given a set of metamodels in input, the toolchain can generate a CSV file reporting several characteristics of the analyzed metamodels i.e.
 possible well-formedness violations (and related severity) and the values of  quality metrics automatically measured on the input metamodels. 
 Thus, users can make use of the produced CSV file to filter out those metamodels that satisfy the characteristics that are of interests for the experiments to be executed.
+This tool chain is developed on top of EMF, Epsilon and we used some of the launcher provided by Epsilon available at <a href="https://www.eclipse.org/epsilon/examples/">https://www.eclipse.org/epsilon/examples/</a>
 
 ![Architecture](images/architecture.png)
 
