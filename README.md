@@ -9,17 +9,26 @@ Thus, users can make use of the produced CSV file to filter out those metamodels
 
 ![Architecture](images/architecture.png)
 
-##Execution flow and testing
+## Execution flow and testing
 In order to test the tool chain please follow these steps:
-1 - Run /it.gssi.cs.qualityevaluation.mm/src/it/gssi/cs/quality/test/TestApp.java and this test method will execute the tool chain on the given folder of metamodels /it.gssi.cs.qualityevaluation.mm/examples
+
+1.  Run /it.gssi.cs.qualityevaluation.mm/src/it/gssi/cs/quality/test/TestApp.java and this test method will execute the tool chain on the given folder of metamodels /it.gssi.cs.qualityevaluation.mm/examples
+
 This folder contains 4 metamodels for testing.
 
-2 - The result of the execution will be visible in the /it.gssi.cs.qualityevaluation.mm/egx-gen/gen folder:
+2. The result of the execution will be visible in the /it.gssi.cs.qualityevaluation.mm/egx-gen/gen folder:
 
-<img src="images/gen.png" width="50%" >.
+<center><img src="images/gen.png" width="50%" ></center>
 
 The execution flow will be detailed in the Eclipse console, as well as the results of the evaluation:
+<center><img src="images/results.png" width="50%" ></center>
 
-<img src="images/results.png" width="50%" >
-3 - Import the generated CSVs files in one of the available analysis tool:
-<img src="images/csv.png" width="50%" >
+3. Import the generated CSVs files in one of the available analysis tool:
+<center><img src="images/csv.png" width="50%" ></center>
+
+## Run the tool chain on a metamodels dataset 
+
+1. Customize the path of the dataset folder at line 63 of /it.gssi.cs.qualityevaluation.mm/src/it/gssi/cs/quality/QualityEvalEngine.java
+with the path of the dataset on your filesystem.
+
+2. Inspect the new results as reported above
